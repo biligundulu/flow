@@ -45,8 +45,7 @@
     position: absolute;
     left: 0; right: 0; bottom: -1px;
     height: 60px;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'><path fill='%23eaf6ff' d='M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z'/></svg>") no-repeat;
-    background-size: cover;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'><path fill='%23eaf6ff' d='M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z'/></svg>") center/cover no-repeat;
   }
   header .wrap { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
   header h1 {
@@ -368,132 +367,118 @@
 </footer>
 
 <script>
-/* =========================================================
-   DATA — monthly flow in TMC, grouped by water year.
-   Missing months are simply omitted (rendered as "—").
-   ========================================================= */
 const DATA = {
-  "1992-93":   {June:16.694750819301614,July:61.48610012430784,August:99.19761554977964,"Sept.":53.0831167363544,"Oct.":47.632772064640086,"Nov.":31.277771499604476,"Dec.":15.980619279014578,"Jan.":8.869632726861795,"Feb.":4.708294722567521,March:5.3685727200813655,April:5.988971635213018,May:8.239164877387273},
-  "1993-94":   {June:7.721408068708329,July:26.58509888122952,August:57.395976946547634,"Sept.":24.24385806305797,"Oct.":42.71150412475986,"Nov.":21.638750141258896,"Dec.":16.49596564583569,"Jan.":9.339882472595773,"Feb.":5.188430331110861,March:4.49251440840773,April:5.937040343541645,May:8.605094360944742},
-  "1994-95":   {June:8.138292462425134,July:118.62242061249859,August:60.89660978641655,"Sept.":52.68035936263983,"Oct.":68.37325121482655,"Nov.":36.35678607752289,"Dec.":16.970731156062836,"Jan.":9.117114928240477,"Feb.":5.3710746977059545,March:4.72458808904961,April:6.180983161939202,May:6.600186461747091},
-  "1995-96":   {June:5.110624929370551,July:23.828651825064984,August:24.418081139111763,"Sept.":48.152390100576326,"Oct.":31.622556221041915,"Nov.":19.924590349192002,"Dec.":11.678011074697704,"Jan.":12.387626850491579,"Feb.":4.548107130749237,March:4.295041247598597,April:5.071325573511131,May:4.308435981466833},
-  "1996-97":   {June:5.236364560967342,July:19.741671375296644,August:37.13239914114589,"Sept.":40.43836591705277,"Oct.":66.90898406599614,"Nov.":23.19638377217765,"Dec.":19.427856254944057,"Jan.":9.234402757373715,"Feb.":4.882792405921574,March:6.663437676573625,April:6.304434399367159,May:7.367256187139789},
-  "1997-98":   {June:5.551003503220704,July:28.305116962368633,August:85.94110068934343,"Sept.":30.14394846875352,"Oct.":34.83881794553057,"Nov.":37.5061701887219,"Dec.":23.816996270765063,"Jan.":10.317942140354846,"Feb.":5.349990959430443,March:5.780422646626738,April:6.844709006667421,May:6.827500282517801},
-  "1998-99":   {June:3.988152333597017,July:39.185454853655784,August:40.62845519267713,"Sept.":42.79053000339021,"Oct.":44.97335292123403,"Nov.":30.580268956944277,"Dec.":17.573036501299576,"Jan.":8.186806418804384,"Feb.":5.522352808226918,March:6.35459599954797,April:7.5311357215504575,May:10.454605040117528},
-  "1999-2000": {June:12.096,July:30.09,August:56.191,"Sept.":16.859,"Oct.":68.991,"Nov.":34.53,"Dec.":20.407,"Jan.":9.276,"Feb.":6.18,March:5.613,April:6.846,May:6.046},
-  "2000-01":   {June:6.185,July:22.154,August:42.2309,"Sept.":58.9952,"Oct.":102.0423,"Nov.":27.6608,"Dec.":21.1125,"Jan.":8.6468,"Feb.":5.0979,March:5.7096,April:8.7994,May:7.8377},
-  "2001-02":   {June:8.16,July:28.0032,August:25.7904,"Sept.":23.9157,"Oct.":37.4354,"Nov.":28.8488,"Dec.":14.4309,"Jan.":6.5656,"Feb.":4.0993,March:4.4312,April:4.4047,May:3.8405},
-  "2002-03":   {June:3.3314,July:7.6385,August:21.6139,"Sept.":13.5616,"Oct.":18.1594,"Nov.":19.0451,"Dec.":9.9199,"Jan.":6.3611,"Feb.":4.4533,March:2.3269,April:1.5097,May:1.516},
-  "2003-04":   {June:1.3211,July:2.4129,August:13.654,"Sept.":13.392,"Oct.":18.2702,"Nov.":11.2924,"Dec.":6.397600000000001,"Jan.":2.4528,"Feb.":1.4963,March:0.7046,April:2.0562,May:2.4643},
-  "2004-05":   {June:11.5387,July:23.9213,August:43.5941,"Sept.":28.3432,"Oct.":31.0986,"Nov.":20.1155,"Dec.":9.1605,"Jan.":3.9716,"Feb.":3.0076,March:3.3853,April:3.6414,May:3.7448},
-  "2005-06":   {June:3.6868,July:37.5521,August:86.5837,"Sept.":54.5686,"Oct.":91.2026,"Nov.":50.7006,"Dec.":23.8944,"Jan.":9.1669,"Feb.":4.4769,March:7.5731,April:5.8546,May:8.6341},
-  "2006-07":   {June:12.4639,July:62.7139,August:68.8167,"Sept.":28.4095,"Oct.":26.1638,"Nov.":25.7309,"Dec.":12.4931,"Jan.":5.2254,"Feb.":4.2098,March:5.0719,April:4.3225,May:4.1691},
-  "2007-08":   {June:3.5907,July:85.2905,August:90.417,"Sept.":56.8042,"Oct.":48.3213,"Nov.":26.5594,"Dec.":12.7411,"Jan.":3.7748,"Feb.":3.3674,March:7.4908,April:8.1827,May:6.8454},
-  "2008-09":   {June:7.6742,July:10.8715,August:59.3352,"Sept.":30.0563,"Oct.":35.5324,"Nov.":20.4367,"Dec.":15.4019,"Jan.":4.5874,"Feb.":3.6681,March:4.3621,April:3.8672,May:5.561},
-  "2009-10":   {June:4.9383,July:38.7044,August:34.5118,"Sept.":54.4278,"Oct.":25.8471,"Nov.":21.4348,"Dec.":11.5284,"Jan.":5.3959,"Feb.":3.4624,March:4.0426,April:6.9873,May:8.1951},
-  "2010-11":   {June:7.7028,July:9.3419,August:23.3498,"Sept.":24.2171,"Oct.":27.3067,"Nov.":63.0689,"Dec.":17.1225,"Jan.":5.8373,"Feb.":4.8954,March:6.3313,April:9.5999,May:10.9864},
-  "2011-12":   {June:9.378,July:30.5369,August:36.5131,"Sept.":56.1161,"Oct.":33.4043,"Nov.":33.1924,"Dec.":14.1797,"Jan.":5.4971,"Feb.":4.5641,March:4.7165,April:6.3478,May:5.8885},
-  "2012-13":   {June:4.1843,July:4.2775,August:10.8865,"Sept.":20.6355,"Oct.":21.0166,"Nov.":11.7593,"Dec.":11.8236,"Jan.":4.2757,"Feb.":4.304,March:2.3222,April:2.0427,May:1.6244},
-  "2013-14":   {June:11.609,July:75.8437,August:73.7371,"Sept.":31.1256,"Oct.":22.2086,"Nov.":20.234,"Dec.":7.8729,"Jan.":4.0784,"Feb.":2.265,March:3.0982,April:3.7998,May:4.9542},
-  "2014-15":   {June:5.9777,July:34.3765,August:60.851,"Sept.":41.338,"Oct.":37.7999,"Nov.":16.6968,"Dec.":10.4122,"Jan.":3.9724,"Feb.":1.5712,March:2.7036,April:5.2017,May:8.3015},
-  "2015-16":   {June:12.5936,July:27.2576,August:26.4761,"Sept.":22.3431,"Oct.":19.0375,"Nov.":28.4334,"Dec.":9.238,"Jan.":3.7635,"Feb.":1.9174,March:1.9239,April:1.3904,May:2.0108},
-  "2016-17":   {June:2.8547,July:15.5199,August:14.6437,"Sept.":20.0757,"Oct.":8.296,"Nov.":3.1728,"Dec.":1.9406,"Jan.":0.7020000000000001,"Feb.":0.3068,March:0.3318,April:0.1362,May:1.3309},
-  "2017-18":   {June:0.7703999999999999,July:7.271799999999999,August:19.260200000000005,"Sept.":37.4413,"Oct.":31.390800000000006,"Nov.":7.8026,"Dec.":6.495600000000002,"Jan.":2.6749,"Feb.":1.0768,March:1.3965000000000003,April:1.1044,May:5.211999999999998},
-  "2018-19":   {June:13.2942,July:124.682,August:176.502,"Sept.":31.5104,"Oct.":27.0188,"Nov.":14.5799,"Dec.":7.1211,"Jan.":2.9294,"Feb.":1.8592,March:1.5726,April:1.8323,May:2.5234},
-  "2019-20":   {June:2.0618,July:7.4434,August:92.3248,"Sept.":71.9042,"Oct.":48.7688,"Nov.":23.9242,"Dec.":14.338,"Jan.":4.2168,"Feb.":1.4851,March:2.0027,April:2.2834,May:4.6472},
-  "2020-21":   {June:6.2039,July:11.345527800000001,August:57.47719999999998,"Sept.":45.1844947,"Oct.":39.7032,"Nov.":23.1564,"Dec.":12.1459,"Jan.":5.6726,"Feb.":2.0379,March:1.5227,April:2.8814,May:3.9836},
-  "2021-22":   {June:7.6972,July:27.9876,August:22.6406,"Sept.":33.1369,"Oct.":48.2732,"Nov.":71.5608,"Dec.":26.1807,"Jan.":6.4327,"Feb.":3.112,March:5.2146,April:5.8638,May:22.9583},
-  "2022-23":   {June:16.458,July:106.926,August:223.557,"Sept.":105.512,"Oct.":120.764,"Nov.":40.643,"Dec.":25.972,"Jan.":7.375,"Feb.":4.512,March:4.305,April:2.992,May:8.467},
-  "2023-24":   {June:2.833,July:8.747,August:19.995,"Sept.":13.585,"Oct.":12.844,"Nov.":10.658,"Dec.":5.447,"Jan.":2.615,"Feb.":0.66,March:0.94,April:0.438,May:2.656},
-  "2024-25":   {June:2.252,July:96.537,August:78.393,"Sept.":27.613,"Oct.":39.711,"Nov.":19.823,"Dec.":18.48,"Jan.":3.538,"Feb.":2.0405,March:3.064,April:4.33,May:9.83},
-  "2025-26":   {June:42.256,July:103.514,August:51.943,"Sept.":40.79,"Oct.":53.4772,"Nov.":17.697,"Dec.":7.603,"Jan.":2.687,"Feb.":2.226,March:2.45,April:2.674,May:3.101},
-  "2026-27":   {June:2.915,July:2.915,August:0.714,"Sept.":24.9542,"Oct.":15.623}
+  "1992-93": {June:16.694750819301614, July:61.48610012430784, August:99.19761554977964, "Sept.":53.0831167363544, "Oct.":47.632772064640086, "Nov.":31.277771499604476, "Dec.":15.980619279014578, "Jan.":8.999999999999998, "Feb.":7.809821470382454, March:8.147801521426284, April:10.733624928076677, May:10.183600956618417},
+  "1993-94": {June:7.721408068708329, July:26.58509888122952, August:57.395976946547634, "Sept.":24.24385806305797, "Oct.":42.71150412475986, "Nov.":21.638750141258896, "Dec.":16.49596564583569, "Jan.":9.351920611131873, "Feb.":7.618844219040805, March:7.526762302479705, April:10.14946243609667, May:11.04800874242069},
+  "1994-95": {June:8.138292462425134, July:118.62242061249859, August:60.89660978641655, "Sept.":52.68035936263983, "Oct.":68.37325121482655, "Nov.":36.35678607752289, "Dec.":16.970731156062836, "Jan.":9.471873132822469, "Feb.":8.747729210462005, March:8.771486462510922, April:11.936885935209104, May:11.962826457194314},
+  "1995-96": {June:5.110624929370551, July:23.828651825064984, August:24.418081139111763, "Sept.":48.152390100576326, "Oct.":31.622556221041915, "Nov.":19.924590349192002, "Dec.":11.678011074697704, "Jan.":8.079327421439716, "Feb.":5.998796947923503, March:6.607442307699976, April:8.28959104080823, May:8.968038948603686},
+  "1996-97": {June:5.236364560967342, July:19.741671375296644, August:37.13239914114589, "Sept.":40.43836591705277, "Oct.":66.90898406599614, "Nov.":23.19638377217765, "Dec.":19.427856254944057, "Jan.":9.413627601301479, "Feb.":6.044551205269491, March:7.365937888232676, April:8.516673015899409, May:9.493417360123504},
+  "1997-98": {June:5.551003503220704, July:28.305116962368633, August:85.94110068934343, "Sept.":30.14394846875352, "Oct.":34.83881794553057, "Nov.":37.5061701887219, "Dec.":23.816996270765063, "Jan.":10.354588182157227, "Feb.":7.260451791970431, March:8.824287300145898, April:10.360070908017283, May:12.250329040285798},
+  "1998-99": {June:3.988152333597017, July:39.185454853655784, August:40.62845519267713, "Sept.":42.79053000339021, "Oct.":44.97335292123403, "Nov.":30.580268956944277, "Dec.":17.573036501299576, "Jan.":8.978296298512382, "Feb.":6.647824586313537, March:6.771415688483268, April:7.99148952009117, May:8.909251487824213},
+  "1999-2000": {June:12.096, July:30.09, August:56.191, "Sept.":16.859, "Oct.":68.991, "Nov.":34.53, "Dec.":20.407, "Jan.":9.276, "Feb.":6.18, March:5.613, April:6.846, May:6.046},
+  "2000-01": {June:6.185, July:22.154, August:42.2309, "Sept.":58.9952, "Oct.":102.0423, "Nov.":27.6608, "Dec.":21.1125, "Jan.":8.6468, "Feb.":5.0979, March:5.7096, April:8.7994, May:7.8377},
+  "2001-02": {June:8.16, July:28.0032, August:25.7904, "Sept.":23.9157, "Oct.":37.4354, "Nov.":28.8488, "Dec.":14.4309, "Jan.":6.5656, "Feb.":4.0993, March:4.4312, April:4.4047, May:3.8405},
+  "2002-03": {June:3.3314, July:7.6385, August:21.6139, "Sept.":13.5616, "Oct.":18.1594, "Nov.":19.0451, "Dec.":9.9199, "Jan.":6.3611, "Feb.":4.4533, March:2.3269, April:1.5097, May:1.516},
+  "2003-04": {June:1.3211, July:2.4129, August:13.654, "Sept.":13.392, "Oct.":18.2702, "Nov.":11.2924, "Dec.":6.3976, "Jan.":2.4528, "Feb.":1.4963, March:0.7046, April:2.0562, May:2.4643},
+  "2004-05": {June:11.5387, July:23.9213, August:43.5941, "Sept.":28.3432, "Oct.":31.0986, "Nov.":20.1155, "Dec.":9.1605, "Jan.":3.9716, "Feb.":3.0076, March:3.3853, April:3.6414, May:3.7448},
+  "2005-06": {June:3.6868, July:37.5521, August:86.5837, "Sept.":54.5686, "Oct.":91.2026, "Nov.":50.7006, "Dec.":23.8944, "Jan.":9.1669, "Feb.":4.4769, March:7.5731, April:5.8546, May:8.6341},
+  "2006-07": {June:12.4639, July:62.7139, August:68.8167, "Sept.":28.4095, "Oct.":26.1638, "Nov.":25.7309, "Dec.":12.4931, "Jan.":5.2254, "Feb.":4.2098, March:5.0719, April:4.3225, May:4.1691},
+  "2007-08": {June:3.5907, July:85.2905, August:90.417, "Sept.":56.8042, "Oct.":48.3213, "Nov.":26.5594, "Dec.":12.7411, "Jan.":3.7748, "Feb.":3.3674, March:7.4908, April:8.1827, May:6.8454},
+  "2008-09": {June:7.6742, July:10.8715, August:59.3352, "Sept.":30.0563, "Oct.":35.5324, "Nov.":20.4367, "Dec.":15.4019, "Jan.":4.5874, "Feb.":3.6681, March:4.3621, April:3.8672, May:5.561},
+  "2009-10": {June:4.9383, July:38.7044, August:34.5118, "Sept.":54.4278, "Oct.":25.8471, "Nov.":21.4348, "Dec.":11.5284, "Jan.":5.3959, "Feb.":3.4624, March:4.0426, April:6.9873, May:8.1951},
+  "2010-11": {June:7.7028, July:9.3419, August:23.3498, "Sept.":24.2171, "Oct.":27.3067, "Nov.":63.0689, "Dec.":17.1225, "Jan.":5.8373, "Feb.":4.8954, March:6.3313, April:9.5999, May:10.9864},
+  "2011-12": {June:9.378, July:30.5369, August:36.5131, "Sept.":56.1161, "Oct.":33.4043, "Nov.":33.1924, "Dec.":14.1797, "Jan.":5.4971, "Feb.":4.5641, March:4.7165, April:6.3478, May:5.8885},
+  "2012-13": {June:4.1843, July:4.2775, August:10.8865, "Sept.":20.6355, "Oct.":21.0166, "Nov.":11.7593, "Dec.":11.8236, "Jan.":4.2757, "Feb.":4.304, March:2.3222, April:2.0427, May:1.6244},
+  "2013-14": {June:11.609, July:75.8437, August:73.7371, "Sept.":31.1256, "Oct.":22.2086, "Nov.":20.234, "Dec.":7.8729, "Jan.":4.0784, "Feb.":2.265, March:3.0982, April:3.7998, May:4.9542},
+  "2014-15": {June:5.9777, July:34.3765, August:60.851, "Sept.":41.338, "Oct.":37.7999, "Nov.":16.6968, "Dec.":10.4122, "Jan.":3.9724, "Feb.":1.5712, March:2.7036, April:5.2017, May:8.3015},
+  "2015-16": {June:12.5936, July:27.2576, August:26.4761, "Sept.":22.3431, "Oct.":19.0375, "Nov.":28.4334, "Dec.":9.238, "Jan.":3.7635, "Feb.":1.9174, March:1.9239, April:1.3904, May:2.0108},
+  "2016-17": {June:2.8547, July:15.5199, August:14.6437, "Sept.":20.0757, "Oct.":8.296, "Nov.":3.1728, "Dec.":1.9406, "Jan.":0.702, "Feb.":0.3068, March:0.3318, April:0.1362, May:1.3309},
+  "2017-18": {June:0.7704, July:7.2718, August:19.2602, "Sept.":37.4413, "Oct.":31.3908, "Nov.":7.8026, "Dec.":6.4956, "Jan.":2.6749, "Feb.":1.0768, March:1.5046, April:2.3141, May:3.2177},
+  "2018-19": {June:13.2942, July:124.682, August:176.502, "Sept.":31.5104, "Oct.":27.0188, "Nov.":14.5799, "Dec.":7.1211, "Jan.":2.9294, "Feb.":1.8592, March:1.5726, April:1.8323, May:2.5234},
+  "2019-20": {June:2.0618, July:7.4434, August:92.3248, "Sept.":71.9042, "Oct.":48.7688, "Nov.":23.9242, "Dec.":14.338, "Jan.":4.2168, "Feb.":1.4851, March:2.0027, April:2.2834, May:4.6472},
+  "2020-21": {June:6.2039, July:11.3455, August:57.4772, "Sept.":45.1845, "Oct.":39.7032, "Nov.":23.1564, "Dec.":12.1459, "Jan.":5.6726, "Feb.":2.0379, March:1.5227, April:2.8814, May:3.2448},
+  "2021-22": {June:7.6972, July:27.9876, August:22.6406, "Sept.":33.1369, "Oct.":48.2732, "Nov.":71.5608, "Dec.":26.1807, "Jan.":6.4327, "Feb.":3.112, March:5.2146, April:5.8638, May:22.9583},
+  "2022-23": {June:16.458, July:106.926, August:223.557, "Sept.":105.512, "Oct.":120.764, "Nov.":40.643, "Dec.":25.972, "Jan.":7.375, "Feb.":4.512, March:4.305, April:2.992, May:8.467},
+  "2023-24": {June:2.833, July:8.747, August:19.995, "Sept.":13.585, "Oct.":12.844, "Nov.":10.658, "Dec.":5.447, "Jan.":2.615, "Feb.":0.66, March:0.94, April:0.438, May:2.656},
+  "2024-25": {June:2.252, July:96.537, August:78.393, "Sept.":27.613, "Oct.":39.711, "Nov.":19.823, "Dec.":18.48, "Jan.":3.538, "Feb.":2.0405, March:3.064, April:4.33, May:9.83},
+  "2025-26": {June:42.256, July:103.514, August:51.943, "Sept.":40.79, "Oct.":53.4772, "Nov.":17.697, "Dec.":7.603, "Jan.":2.687, "Feb.":2.226, March:2.45, April:2.674, May:3.101},
+  "2026-27": {June:2.915, July:2.915, August:0.714, "Sept.":24.9542, "Oct.":15.623}
 };
 
-const MONTHS = ["June","July","August","Sept.","Oct.","Nov.","Dec.","Jan.","Feb.","March","April","May"];
+const MONTHS = ["June", "July", "August", "Sept.", "Oct.", "Nov.", "Dec.", "Jan.", "Feb.", "March", "April", "May"];
 
-/* =========================================================
-   DERIVED STRUCTURES
-   ========================================================= */
 const decades = {};
-Object.keys(DATA).forEach(y => {
-  const d = Math.floor(parseInt(y, 10) / 10) * 10 + "s";
-  (decades[d] = decades[d] || []).push(y);
+Object.keys(DATA).forEach((year) => {
+  const decade = Math.floor(parseInt(year, 10) / 10) * 10 + "s";
+  (decades[decade] = decades[decade] || []).push(year);
 });
-const decadeLabels = Object.keys(decades).sort();
-decadeLabels.forEach(d => decades[d].sort());
 
-/* =========================================================
-   DOM REFS
-   ========================================================= */
+const decadeLabels = Object.keys(decades).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+decadeLabels.forEach((d) => decades[d].sort((a, b) => a.localeCompare(b, undefined, { numeric: true })));
+
 const decadeSel = document.getElementById("decadeSelect");
-const thead     = document.getElementById("thead");
-const tbody     = document.getElementById("tbody");
-const warning   = document.getElementById("warning");
-const statsEl   = document.getElementById("stats");
-const barsEl    = document.getElementById("bars");
-const labelsEl  = document.getElementById("chartLabels");
+const thead = document.getElementById("thead");
+const tbody = document.getElementById("tbody");
+const warning = document.getElementById("warning");
+const statsEl = document.getElementById("stats");
+const barsEl = document.getElementById("bars");
+const labelsEl = document.getElementById("chartLabels");
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
 function fmt(n) {
-  return n.toLocaleString(undefined, {
+  return Number(n).toLocaleString(undefined, {
     minimumFractionDigits: 3,
     maximumFractionDigits: 3
   });
 }
+
 function yearSum(yearObj) {
-  return Object.values(yearObj).reduce((a, b) => a + b, 0);
+  return Object.values(yearObj).reduce((sum, value) => sum + Number(value || 0), 0);
 }
+
 function isComplete(yearObj) {
   return Object.keys(yearObj).length === 12;
 }
 
-/* =========================================================
-   STATS STRIP
-   ========================================================= */
 function renderStats() {
   const years = Object.keys(DATA);
   const firstYear = years[0];
-  const lastYear  = years[years.length - 1];
+  const lastYear = years[years.length - 1];
 
-  // All-time highest monthly value
-  let maxVal = -Infinity, maxWhere = "";
-  years.forEach(y => {
-    MONTHS.forEach(m => {
+  let maxVal = -Infinity;
+  let maxWhere = "";
+  years.forEach((y) => {
+    MONTHS.forEach((m) => {
       const v = DATA[y][m];
       if (v !== undefined && v > maxVal) {
-        maxVal = v; maxWhere = `${m} ${y}`;
+        maxVal = v;
+        maxWhere = `${m} ${y}`;
       }
     });
   });
 
-  // All-time lowest monthly value (exclude zero? keep as-is)
-  let minVal = Infinity, minWhere = "";
-  years.forEach(y => {
-    MONTHS.forEach(m => {
+  let minVal = Infinity;
+  let minWhere = "";
+  years.forEach((y) => {
+    MONTHS.forEach((m) => {
       const v = DATA[y][m];
       if (v !== undefined && v < minVal) {
-        minVal = v; minWhere = `${m} ${y}`;
+        minVal = v;
+        minWhere = `${m} ${y}`;
       }
     });
   });
 
-  // Mean of complete-year annual totals
-  const completeTotals = years
-    .filter(y => isComplete(DATA[y]))
-    .map(y => yearSum(DATA[y]));
-  const meanTotal = completeTotals.reduce((a, b) => a + b, 0) / completeTotals.length;
+  const completeTotals = years.filter((y) => isComplete(DATA[y])).map((y) => yearSum(DATA[y]));
+  const meanTotal = completeTotals.length ? completeTotals.reduce((a, b) => a + b, 0) / completeTotals.length : 0;
 
   const stats = [
-    { label: "Water years",     value: years.length,  unit: `${firstYear} → ${lastYear}` },
-    { label: "Highest month",   value: fmt(maxVal),   unit: maxWhere },
-    { label: "Lowest month",    value: fmt(minVal),   unit: minWhere },
-    { label: "Mean annual",     value: fmt(meanTotal),unit: "TMC (complete years)" }
+    { label: "Water years", value: years.length, unit: `${firstYear} → ${lastYear}` },
+    { label: "Highest month", value: fmt(maxVal), unit: maxWhere },
+    { label: "Lowest month", value: fmt(minVal), unit: minWhere },
+    { label: "Mean annual", value: fmt(meanTotal), unit: "TMC (complete years)" }
   ];
 
-  statsEl.innerHTML = stats.map(s => `
+  statsEl.innerHTML = stats.map((s) => `
     <div class="stat">
       <div class="label">${s.label}</div>
       <div class="value">${s.value} <span class="unit">${s.unit}</span></div>
@@ -501,49 +486,47 @@ function renderStats() {
   `).join("");
 }
 
-/* =========================================================
-   RENDER TABLE FOR A DECADE
-   ========================================================= */
 function renderDecade(decade) {
-  const years = decades[decade];
+  const years = decades[decade] || [];
   thead.innerHTML = "";
   tbody.innerHTML = "";
   warning.classList.remove("show");
 
-  // Header
   const headRow = document.createElement("tr");
   const corner = document.createElement("th");
   corner.textContent = "Month";
   headRow.appendChild(corner);
-  years.forEach(y => {
+
+  years.forEach((y) => {
     const th = document.createElement("th");
     th.textContent = y;
     headRow.appendChild(th);
   });
   thead.appendChild(headRow);
 
-  // Month rows
-  MONTHS.forEach(month => {
+  MONTHS.forEach((month) => {
     const tr = document.createElement("tr");
     const rh = document.createElement("td");
     rh.textContent = month;
     tr.appendChild(rh);
 
-    years.forEach(y => {
+    years.forEach((y) => {
       const v = DATA[y][month];
       const td = document.createElement("td");
+
       if (v === undefined) {
         td.textContent = "—";
         td.className = "dash";
       } else {
         td.textContent = fmt(v);
       }
+
       tr.appendChild(td);
     });
+
     tbody.appendChild(tr);
   });
 
-  // Total row
   const totalTr = document.createElement("tr");
   totalTr.className = "total";
   const totalHead = document.createElement("td");
@@ -551,10 +534,11 @@ function renderDecade(decade) {
   totalTr.appendChild(totalHead);
 
   let anyIncomplete = false;
-  years.forEach(y => {
+  years.forEach((y) => {
     const complete = isComplete(DATA[y]);
     const sum = yearSum(DATA[y]);
     const td = document.createElement("td");
+
     if (complete) {
       td.textContent = fmt(sum);
     } else {
@@ -562,31 +546,27 @@ function renderDecade(decade) {
       td.classList.add("partial");
       anyIncomplete = true;
     }
+
     totalTr.appendChild(td);
   });
+
   tbody.appendChild(totalTr);
 
   if (anyIncomplete) {
-    const incompleteYears = years.filter(y => !isComplete(DATA[y]));
+    const incompleteYears = years.filter((y) => !isComplete(DATA[y]));
     warning.textContent =
       `⚠️ Incomplete water years (partial totals): ${incompleteYears.join(", ")}. ` +
-      `Values marked * are not full-year annual flow.`;
+      "Values marked * are not full-year annual flow.";
     warning.classList.add("show");
   }
 }
 
-/* =========================================================
-   RENDER CHART for latest complete year in decade
-   ========================================================= */
 function renderChart(decade) {
-  const years = decades[decade];
-  // Pick the latest complete year in this decade; fall back to latest year
-  const completeYears = years.filter(y => isComplete(DATA[y]));
-  const chosen = completeYears.length
-    ? completeYears[completeYears.length - 1]
-    : years[years.length - 1];
+  const years = decades[decade] || [];
+  const completeYears = years.filter((y) => isComplete(DATA[y]));
+  const chosen = completeYears.length ? completeYears[completeYears.length - 1] : years[years.length - 1];
 
-  const values = MONTHS.map(m => DATA[chosen][m] || 0);
+  const values = MONTHS.map((m) => DATA[chosen][m] || 0);
   const max = Math.max(...values, 1);
 
   barsEl.innerHTML = "";
@@ -596,9 +576,45 @@ function renderChart(decade) {
     const v = values[i];
     const bar = document.createElement("div");
     bar.className = "bar";
-    bar.style.height = (v / max * 100) + "%";
+    bar.style.height = `${(v / max) * 100}%`;
     bar.title = `${m} ${chosen}: ${fmt(v)} TMC`;
     barsEl.appendChild(bar);
 
     const lbl = document.createElement("div");
-    lbl.textContent = m.replace
+    lbl.textContent = m.replace(/\./g, "");
+    labelsEl.appendChild(lbl);
+  });
+}
+
+function populateSelect() {
+  decadeSel.innerHTML = decadeLabels.map((d) => `<option value="${d}">${d}</option>`).join("");
+  const latest = decadeLabels[decadeLabels.length - 1];
+  decadeSel.value = latest;
+}
+
+function init() {
+  populateSelect();
+
+  const coverageBadge = document.getElementById("coverageBadge");
+  const allYears = Object.keys(DATA).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  if (coverageBadge) {
+    coverageBadge.textContent = `${allYears[0]} → ${allYears[allYears.length - 1]}`;
+  }
+
+  renderStats();
+
+  const applySelection = () => {
+    const selected = decadeSel.value;
+    renderDecade(selected);
+    renderChart(selected);
+  };
+
+  decadeSel.addEventListener("change", applySelection);
+  applySelection();
+}
+
+init();
+</script>
+
+</body>
+</html>
